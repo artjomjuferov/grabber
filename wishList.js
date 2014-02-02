@@ -97,10 +97,10 @@ window.createDiv = function(){
   mainDiv.appendChild(dragDiv);
   mainDiv.appendChild(allImg);
 
-  document.getElementsByTagName('body')[0].appendChild(mainDiv);
-  document.getElementsByTagName('body')[0].appendChild(jqueryScript1);
-  document.getElementsByTagName('body')[0].appendChild(jqueryScript2);
+  document.getElementsByTagName('head')[0].appendChild(jqueryScript1);
+  document.getElementsByTagName('head')[0].appendChild(jqueryScript2);
 
+  document.getElementsByTagName('body')[0].appendChild(mainDiv);
 };
 
 
@@ -108,8 +108,9 @@ window.createDiv();
 
 $(function() {
   $('#wlAllImg').click(function() {
-    $('#wlShowImgs').empty();
-    $('#wlShowImgs').remove();
+    alert("sd");
+    //$('#wlShowImgs').empty();
+    //$('#wlShowImgs').remove();
     var imgs = $( "body" ).find( "img" );
     var imagesDiv = document.createElement("div");
     imagesDiv.setAttribute('id',"wlShowImgs");
