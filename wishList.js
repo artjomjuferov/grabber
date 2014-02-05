@@ -1,7 +1,6 @@
-  
 function findChildImg(url){
   if (url != ""){
-    var a = $("a[href='"+url+"']").find('img').attr('src');
+    var a = $jq("a[href='"+url+"']").find('img').attr('src');
     return a;
   }
 }
@@ -28,7 +27,7 @@ function drop(evt) {
     evt.stopPropagation();
     evt.preventDefault();
 
-    $('#wlDrag').empty();
+    $jq('#wlDrag').empty();
     var imageUrl = evt.dataTransfer.getData("url");
     if (isImg(imageUrl) == 0){
       imageUrl = findChildImg(imageUrl);
@@ -42,8 +41,10 @@ function drop(evt) {
     document.getElementById('wlDrag').appendChild(dragImg);
 }
 
+
+
 window.createDiv = function(){
-  var jqueryScript1 = document.createElement("script");
+   var jqueryScript1 = document.createElement("script");
 
   jqueryScript1.type = "text/javascript";
   jqueryScript1.src = "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js";
@@ -51,7 +52,10 @@ window.createDiv = function(){
   var jqueryScript2 = document.createElement("script");
   jqueryScript2.type = "text/javascript";
   jqueryScript2.src = " http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js";
-  
+
+  document.getElementsByTagName('body')[0].appendChild(jqueryScript1);
+  document.getElementsByTagName('body')[0].appendChild(jqueryScript2);
+
   var mainDiv = document.createElement("div");
   mainDiv.setAttribute('id',"wlMain");
   mainDiv.style.zIndex = "1000";
@@ -69,7 +73,7 @@ window.createDiv = function(){
 
   var s = document.createElement("input"); //input element, Submit button
   s.setAttribute('type',"button");
-  s.setAttribute('value',"Send");
+  s.setAttribute('value',"Save");
   s.setAttribute('id',"wlSend");
 
   textDiv.appendChild(i);
@@ -97,21 +101,18 @@ window.createDiv = function(){
   mainDiv.appendChild(dragDiv);
   mainDiv.appendChild(allImg);
 
-  document.getElementsByTagName('head')[0].appendChild(jqueryScript1);
-  document.getElementsByTagName('head')[0].appendChild(jqueryScript2);
-
   document.getElementsByTagName('body')[0].appendChild(mainDiv);
 };
 
-
 window.createDiv();
 
-$(function() {
-  $('#wlAllImg').click(function() {
-    alert("sd");
-    //$('#wlShowImgs').empty();
-    //$('#wlShowImgs').remove();
-    var imgs = $( "body" ).find( "img" );
+$jq = $.noConflict();
+
+$jq(function() {
+  $jq('#wlAllImg').click(function() {
+    $jq('#wlShowImgs').empty();
+    $jq('#wlShowImgs').remove();
+    var imgs = $jq( "body" ).find( "img" );
     var imagesDiv = document.createElement("div");
     imagesDiv.setAttribute('id',"wlShowImgs");
     imagesDiv.style.zIndex = "1000";
@@ -123,7 +124,7 @@ $(function() {
     imagesDiv.style.border = "3px solid #aaaaaa";
     document.getElementsByTagName('body')[0].appendChild(imagesDiv);
 
-    $.each(imgs, function( key, value ) {
+    $jq.each(imgs, function( key, value ) {
       var img = document.createElement("img");
       img.setAttribute('id',"wlImage"+key);
       img.setAttribute('src',value.src);
@@ -132,13 +133,12 @@ $(function() {
   });
 });
 
-$(function() {
-  $('#wlSend').click(function() {
-    $('#wlShowImgs').empty();
-    $('#wlShowImgs').remove();
-    $('#wlDrag').empty();
-    var tmp = $("#wlInput").val();
-    alert(tmp);
-  });
-});
 
+$jq('#wlSend').click(function() {
+  $jq('#wlShowImgs').empty();
+  $jq('#wlShowImgs').remove();
+  $jq('#wlDrag').empty();
+  var tmp1 = $jq("#wlInput").val();
+  var tmp2 = $jq("#wlDragImg").src;
+  alert(tmp1+' '+tmp2);
+});
