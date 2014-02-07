@@ -32,11 +32,6 @@ jQuery( document ).ready(function() {
     dragDiv.style.padding = "10px";
     dragDiv.style.border = "3px solid #aaaaaa";  
     
-    dragDiv.addEventListener('dragenter', noopHandler, false);
-    dragDiv.addEventListener('dragexit', noopHandler, false);
-    dragDiv.addEventListener('dragover', noopHandler, false);
-    dragDiv.addEventListener('drop', drop, false);
-
     allImg = document.createElement("input"); //input element, Submit button
     allImg.setAttribute('type',"button");
     allImg.setAttribute('value',"Show All");
@@ -47,63 +42,51 @@ jQuery( document ).ready(function() {
     mainDiv.appendChild(allImg);
 
     document.getElementsByTagName('body')[0].appendChild(mainDiv);
-  }
+  };
 
   window.createDiv();
 
   $jq = $.noConflict();
+  var movementTimer = null;
+  var nowMousePos = {}, wasMousePos = {}, x, y, evt = "";
 
-  function findChildImg(url){
-    if (url != ""){
-      var a = $jq("a[href='"+url+"']").find('img').attr('src');
-      return a;
+  $jq('body').mousemove(function(e)
+  { 
+      x = event.pageX;
+      y = event.pageY;
+      
+      evt = document.elementFromPoint(event.pageX- window.pageXOffset, event.pageY- window.pageYOffset);
+      clearTimeout(movementTimer);
+      movementTimer = setTimeout(function()
+      {
+        alert(evt.tagName);
+        if (evt.tagName != "IMG"){
+          evt = findChildImg(evt);
+          if (evt.tagName == "undefined"){
+             return false;
+          }
+          else
+          {
+            $jq('#wlDrag').empty();
+          }
+        }
+        else
+        {
+          $jq('#wlDrag').empty();
+        }
+
+        var image = document.createElement("img");
+        image.setAttribute('id',"wlDragImg");
+        image.setAttribute('src',evt.src);
+        document.getElementById('wlDrag').appendChild(image);
+      }, 1000);
+  })
+
+  function findChildImg(obj){
+    if (obj != null){
+      obj = $jq(obj).find('*')[0];
     }
-  }
-
-  function isElementInViewport (el) {
-      var rect = el.getBoundingClientRect();
-      return (
-          rect.top >= 0 &&
-          rect.left >= 0 &&
-          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && 
-          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-      );
-  }
-
-  function isImg(url){
-    if (url == null){
-      return 0;
-    }
-    var patt1 = /.png$|.gif$|.jpg$/i;
-    var result = url.match(patt1);
-    if(result != null){
-      return 1;
-    }else{
-      return 0;
-    }
-  }
-
-  function noopHandler(evt) {
-      evt.stopPropagation();
-      evt.preventDefault();
-  }
-
-  function drop(evt) {
-      evt.stopPropagation();
-      evt.preventDefault();
-
-      $jq('#wlDrag').empty();
-      var imageUrl = evt.dataTransfer.getData("url");
-      if (isImg(imageUrl) == 0){
-        imageUrl = findChildImg(imageUrl);
-        if (isImg(imageUrl) == 0){
-          return false;
-        }    
-      }
-      var dragImg = document.createElement("img");
-      dragImg.setAttribute('id',"wlDragImg");
-      dragImg.setAttribute('src',imageUrl);
-      document.getElementById('wlDrag').appendChild(dragImg);
+    return obj;
   }
 
   $jq(function() {
@@ -124,12 +107,10 @@ jQuery( document ).ready(function() {
       document.getElementsByTagName('body')[0].appendChild(imagesDiv);
 
       $jq.each(imgs, function( key, value ) {
-        if ( isElementInViewport(value) ) {   
-          var img = document.createElement("img");
-          img.setAttribute('id',"wlImage"+key);
-          img.setAttribute('src',value.src);
-          document.getElementById('wlShowImgs').appendChild(img);
-        }
+        var img = document.createElement("img");
+        img.setAttribute('id',"wlImage"+key);
+        img.setAttribute('src',value.src);
+        document.getElementById('wlShowImgs').appendChild(img);
       });
     });
   });
@@ -143,5 +124,4 @@ jQuery( document ).ready(function() {
     var tmp2 = $jq("#wlDragImg").src;
     alert(tmp1+' '+tmp2);
   });
-
 });

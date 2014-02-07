@@ -1,4 +1,4 @@
-clipper
+grabber
 =======
 
 create bookmark with url:
