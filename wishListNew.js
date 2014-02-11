@@ -52,10 +52,10 @@ jQuery( document ).ready(function() {
 
   $jq('body').mousemove(function(e)
   { 
-      x = event.pageX;
-      y = event.pageY;
+      x = e.pageX;
+      y = e.pageY;
       
-      evt = document.elementFromPoint(event.pageX- window.pageXOffset, event.pageY- window.pageYOffset);
+      evt = document.elementFromPoint(e.pageX- window.pageXOffset, e.pageY- window.pageYOffset);
       clearTimeout(movementTimer);
       movementTimer = setTimeout(function()
       {
