@@ -59,10 +59,9 @@ jQuery( document ).ready(function() {
       clearTimeout(movementTimer);
       movementTimer = setTimeout(function()
       {
-        alert(evt.tagName);
         if (evt.tagName != "IMG"){
           evt = findChildImg(evt);
-          if (evt.tagName == "undefined"){
+          if (evt.tagName == "undefined" || evt.tagName != "IMG"){
              return false;
           }
           else
